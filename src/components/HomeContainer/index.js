@@ -3,26 +3,26 @@ import './homeStyle.css'
 
 const HomeContainer =()=> {
     const [selection,setSelection] = useState('');
+    
     const handleInput =()=>{ document.addEventListener('keyup', (e) => {
        console.log(e.key)
        const keyPressed = e.key;
        if(keyPressed==='Backspace')
        {
-           setSelection(selection.slice(0,(selection.length-1)))
+           if(selection.length > 0)
+           {
+             setSelection(selection.slice(0,(selection.length-1)))
+           }
+           else
+           {
+               setSelection('')
+           }
        }
        else
        {
             setSelection(selection + keyPressed)
-           console.log(selection,"<==== selection ")
-            if(selection === 'register')
-            {
-                console.log('register')
-            }
-            else if(selection === 'login')
-            console.log('login')
        }
-       
-      });}
+    });}
     return(
         <div>
             <div className='home-container' onKeyDown={handleInput()}>
@@ -50,7 +50,6 @@ const HomeContainer =()=> {
                     }
                 </div>
             </div>
-           
         </div>
     )
     

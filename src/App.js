@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import HomeContainer from './components/HomeContainer'
-
+import LogReg from './components/LogReg'
 function App() {
   return (
     <div className="App">
-     <HomeContainer> </HomeContainer>
+     <LogReg></LogReg>
     </div>
   );
 }

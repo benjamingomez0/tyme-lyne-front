@@ -1,0 +1,32 @@
+@font-face{
+    font-family:'VCR OSD Mono';
+    src: url(../../fonts/VCR_OSD_MONO_1.001.ttf) 
+}
+.error{
+    position:relative;
+    margin-top:10px;
+    color:red;
+}
+
+.input-box{
+    border: 1px dashed black;
+    box-shadow: none;
+   
+}
+.form-container{
+    margin: 10% auto;
+    margin-bottom:20px;
+}
+
+#reg-submit{
+    margin-top:20px;
+    background-color:white;
+    border: 1px dashed black;
+    font-family: 'VCR OSD Mono';
+
+}
+#reg-submit:hover{
+    background-color:black;
+    color: white;
+    border: 1px dashed white;
+}
