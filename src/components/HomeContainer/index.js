@@ -30,7 +30,7 @@ const HomeContainer =()=> {
                     <h1 id='home-title'>TYME // LYNE</h1>
                     take control of your time. <br/>
                     take control of your life.<br/><br/>
-                    // <br/><br/>
+                     <br/><br/>
                     "register" - get started.<br/>
                     "login" - see your tl. <br/><br/>
                     {selection}<div className="cursor-div"></div>

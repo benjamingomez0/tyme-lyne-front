@@ -4,7 +4,7 @@ import LogReg from './components/LogReg'
 function App() {
   return (
     <div className="App">
-     <LogReg></LogReg>
+     <LogReg> </LogReg>
     </div>
   );
 }
