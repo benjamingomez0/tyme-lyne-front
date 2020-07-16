@@ -1,66 +1,91 @@
-import React, {useState} from 'react';
-import { render } from '@testing-library/react';
+import React, { Component } from 'react';
 import './LogRegStyle.css';
 
-const LogReg = ()=>
-{
-    //hooks
 
-    const [userName, setUserName] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirm, setConfirm] = useState('')
-    const [nameError, setNameError] = useState('')
-    const [confirmError, setConfirmError] = useState('')
-  
-    // event handlers for state and Submit
 
-  const handleUserNameChange=(e)=>{
-      setUserName(e.currentTarget.value)
-  }
-  const handlePwChange = (e)=>{
-      setPassword(e.currentTarget.value)
-  }
-  const handleConfirmChange = (e)=>{
-      setConfirm(e.currentTarget.value)
-  }
-  const handleSubmit = (e) =>{
-      e.preventDefault() 
-      if(password!==confirm)
-      {
-          setConfirmError('Password must match confirmation')
-      }
+export default class LogReg extends Component{
+    state = {
+        display_name:'',
+        password:'',
+        email:'',
+        confirm:'',
+        nameError:'',
+        confirmError:''
+    }
+    handleChange=(e)=>{
+        this.setState({
+            [e.currentTarget.name]: e.currentTarget.value
+        }) 
+    }
 
-    //   To Do: check if username is taken
-    //   if()
-    //   {
-    //       setNameError('Username taken. choose another')
-    //   }
-
-  }
-  
-return(
-    <div className= "home-container">
-        <div className = "home-box">
-            <h1>Registration</h1>
-            <div className = "form-container">
-                <form id= "login-form" onSubmit={handleSubmit}>
-                    Username:<input type= "text" className = "input-box" name = "userName" onChange = {handleUserNameChange}/>
-                    <br/>
-                    <br/>
-                    Password:<input type= "text" className = "input-box" name ="password" onChange = {handlePwChange}/>
-                    <br/>
-                    <br/>
-                    Confirm Password:<input type= "text" className = "input-box" name ="confirm" onChange ={handleConfirmChange}/>
-                    <br/>
-                    <input type = "submit" id = "reg-submit"/>
-                </form>
-                <div className="error">{confirmError? confirmError:''}</div>
-            </div>
+    handleSubmit = async (e) =>{
+        e.preventDefault() 
+        if(this.state.password !== this.state.confirm)
+        {
+            this.setState({confirmError:'Password must match confirmation'})
+        }
+        else
+        {
+            const data = 
+            {
+                display_name: this.state.display_name,
+                email: this.state.email,
+                password: this.state.password
+            }
+            const user = await fetch('http://localhost:8000/auth/users/new', 
+            {
+                method:'POST',
+                body: JSON.stringify(data),
+                mode: 'cors',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+            });
             
-        </div>
-    </div>
-)
-
+            this.props.setUser({user_id:data._id,
+                                display_name:data.display_name})
+        }
+      
+    }
+    render()
+    { 
+        console.log("aaaaaaa")
+        const logged = this.props.returning; 
+        console.log(logged, "<=== this is logged");
+        return(
+            
+            <div className= "home-container">
+                <div className = "home-box">
+                    { this.props.returning && <h1>User Login</h1>}
+                    { !this.props.returning && <h1>Registration</h1>}
+                    <div className = "form-container">
+                        <form id= "login-form" onSubmit={this.handleSubmit}>
+                        { this.props.returning? null 
+                        : <div> Display Name:<input type= "text" className = "input-box" name = "display_name" onChange = {this.handleChange}/>
+                            <br/>
+                            <br/>
+                            </div>}
+                            email:<input type= "text" className = "input-box" name = "email" onChange = {this.handleChange}/>
+                            <br/>
+                            <br/>
+                            Password:<input type= "text" className = "input-box" name ="password" onChange = {this.handleChange}/>
+                            <br/>
+                            <br/>
+                            {this.props.returning? null :
+                            <div> Confirm Password:<input type= "text" className = "input-box" name ="confirm" onChange ={this.handleChange}/>
+                            <br/>
+                            </div>
+                            }
+                            <input type = "submit" id = "reg-submit"/>
+                        </form>
+                        <div className="error">{this.state.confirmError? this.state.confirmError:''}</div>
+                    </div>
+                    
+                </div>
+            </div>   
+        )
+    }
+        
+    
+    
 }
-
-export default LogReg

@@ -1,12 +1,50 @@
 import React, { Component } from 'react';
-import HomeContainer from './components/HomeContainer'
+
+// router Dom
+import {Route,Switch, withRouter} from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+
+//route constants
+import * as ROUTES from './Constants/routes';
+
+//component imports
+import HomeContainer from './components/HomeContainer';
 import LogReg from './components/LogReg'
-function App() {
-  return (
-    <div className="App">
-     <LogReg> </LogReg>
-    </div>
-  );
+import Dashboard from './components/Dashboard'
+
+class App extends Component
+{
+
+  state = {
+    currentUser : '',
+    returning:false
+  }
+
+  setUser = (user) =>{
+    this.setState({currentUser:user})
+  }
+  setStatus = (s) =>{
+    this.setState({returning:s})
+    
+    
+  }
+
+  render()
+  {
+    return(
+      <div className="App">
+      <Router>
+        <Switch>
+            <Route exact path = {ROUTES.HOME} render ={(props)=><HomeContainer setStatus = {this.setStatus} {...props}/>}/>
+            <Route exact path = {ROUTES.REGISTER} render ={(props)=> <LogReg  setUser = {this.setUser} currentUser = {this.state.currentUser} {...props}/>}/>
+            <Route exact path = {ROUTES.LOGIN} render ={(props)=> <LogReg  setUser = {this.setUser} currentUser = {this.state.currentUser} returning =  {this.state.returning}/>}/>
+            <Route exact path = {`${ROUTES.DASHBOARD}:/id}`} render = {(props)=> <Dashboard currentUser = {this.state.currentUser} {...props}/>}/>
+         </Switch>
+      </Router>
+      </div>
+    )
+    
+  }
 }
 
 export default App;

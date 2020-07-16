@@ -1,20 +1,32 @@
 const express   = require('express')
 const app       = express()
-const PORT      = 8000
+const cors      = require('cors')
+const PORT      = process.env.PORT || 8000
+
+
+//configures so we can have environment var in the dotenv file
+require('dotenv').config()
+
+//database
+require('./config/db')
 
 // models
 const User = require('./models/Users')
 
 //middlewear
+app.use(cors());
 app.use(express.json());
 
-//database
-require('./config/db')
+// mounting controllers
+const userController = require('./controllers/users')
+app.use('/auth', userController)
 
-// to do *user controller*
 
+app.get('/',(req,res)=>{
+    res.send('COMING IN HOT!')
+})
+
+//starts our server
 app.listen(PORT, ()=>{
-    
-    console.log(`...Listening on port ${PORT}`)
-
+    console.log(`...Listening on port: ${PORT}`)
 });

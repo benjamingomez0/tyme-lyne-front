@@ -16,6 +16,7 @@
 .form-container{
     margin: 10% auto;
     margin-bottom:20px;
+    text-align: left;
 }
 
 #reg-submit{
@@ -29,4 +30,15 @@
     background-color:black;
     color: white;
     border: 1px dashed white;
+    
+}
+
+#login-form{
+    margin-left:38%;
+}
+@media (max-width: 850px){
+    #login-form{
+        margin-left:20%;
+    }
+    
 }
