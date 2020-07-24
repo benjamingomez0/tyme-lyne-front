@@ -1,7 +1,7 @@
 const express = require('express')
 const router  = express.Router()
 const User    =  require('../models/Users')
-const bcrypt  = require('bcryptjs')
+const bcrypt  = require('bcrypt')
 
 
 router.get('/users', (req,res) =>{
@@ -12,25 +12,55 @@ router.get('/users', (req,res) =>{
 router.post('/users/new', async (req,res)=>{
     
     const display_name = req.body.display_name
-    const password     = req.body.password
-    const phash        = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+    const password     = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
     const email        = req.body.email
+    const foundEmail = await User.findOne({email:req.body.email});
+    
+    //check to ensure email has not been taken
+    if(foundEmail)
+    {
+        res.json(
+            {
+                message: "This email has already been registered",
+                code:400
+            }
+        )
+    }
+    else
+    {   //instantiate the new user
+        const createdUser = new User({display_name,password,email})
 
-    //instantiate the new user
-    const createdUser = new User({display_name,phash,email})
-
-    //add new user to db then send user ID as response
-    createdUser.save()
-    .then(()=>res.json(
-        {
-        user_id: createdUser._id,
-        message: "success, user created!",
-        code:200
-    }))
-    .catch(err => res.status(400).json(`Error is: ${err}`))
-
-  
+        //add new user to db then send user ID and username as response
+        createdUser.save()
+        .then(()=>res.json(
+            {
+            user_id: createdUser._id,
+            display_name : createdUser.display_name,
+            message: "success, user created!",
+            code:200
+        }))
+        .catch(err => res.status(400).json(`Error is: ${err}`))
+    }
 });
 
+//User Login
+router.post('/users/login', async (req,res)=>{
+    try
+    {
+        const foundUser = await User.findOne({ email : req.body.email });
+
+        if(foundUser)
+        {
+
+        }
+    }
+    catch(err)
+    {
+        res.json({
+            message: "Username or password is incorrect",
+            err: err
+            })
+    }
+});
 
 module.exports = router;

@@ -9,7 +9,7 @@ export default class LogReg extends Component{
         password:'',
         email:'',
         confirm:'',
-        nameError:'',
+        emailError:'',
         confirmError:''
     }
     handleChange=(e)=>{
@@ -20,38 +20,59 @@ export default class LogReg extends Component{
 
     handleSubmit = async (e) =>{
         e.preventDefault() 
+
+
         if(this.state.password !== this.state.confirm)
         {
             this.setState({confirmError:'Password must match confirmation'})
         }
         else
         {
-            const data = 
+            // this section handles the registering a user for when the component is configured for registration
+            if(!this.props.returning)
             {
-                display_name: this.state.display_name,
-                email: this.state.email,
-                password: this.state.password
+                const data = 
+                {
+                    display_name: this.state.display_name,
+                    email: this.state.email,
+                    password: this.state.password
+                }
+                const user = await fetch('http://localhost:8000/auth/users/new', 
+                {
+                    method:'POST',
+                    body: JSON.stringify(data),
+                    mode: 'cors',
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                }) ;
+                const userParsed = await user.json();
+                
+                console.log(userParsed)
+
+                if(user.code === 400)
+                {
+                    this.setState({emailError:user.message})
+                }
+                else
+                {
+                    this.props.setUser(userParsed)
+                }
+                
+                
+
+                
             }
-            const user = await fetch('http://localhost:8000/auth/users/new', 
+            else
             {
-                method:'POST',
-                body: JSON.stringify(data),
-                mode: 'cors',
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-            });
+                //TO DO: this section is for when the component is configured for logging in instead of registering
+            }
             
-            this.props.setUser({user_id:data._id,
-                                display_name:data.display_name})
         }
       
     }
     render()
     { 
-        console.log("aaaaaaa")
-        const logged = this.props.returning; 
-        console.log(logged, "<=== this is logged");
         return(
             
             <div className= "home-container">
@@ -64,10 +85,12 @@ export default class LogReg extends Component{
                         : <div> Display Name:<input type= "text" className = "input-box" name = "display_name" onChange = {this.handleChange}/>
                             <br/>
                             <br/>
-                            </div>}
+                          </div>
+                        }
                             email:<input type= "text" className = "input-box" name = "email" onChange = {this.handleChange}/>
                             <br/>
                             <br/>
+                            { !this.state.emailError && <div className="error">{this.state.emailError}</div> }
                             Password:<input type= "text" className = "input-box" name ="password" onChange = {this.handleChange}/>
                             <br/>
                             <br/>

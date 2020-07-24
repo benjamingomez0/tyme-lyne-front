@@ -33,8 +33,10 @@ const HomeContainer =(props)=> {
        })
     ;}
     const  handleChoice = () =>{
-        let route = selection === 'login' ? ROUTES.LOGIN:ROUTES.REGISTER
-        props.setStatus(selection === 'login');
+        let route = selection === 'login' ? ROUTES.LOGIN:ROUTES.REGISTER;
+
+        props.setStatus( selection === 'login' );
+
         props.history.push(`${route}`)
     }
    
@@ -60,14 +62,14 @@ const HomeContainer =(props)=> {
                     {
                         selection==='register'?
                         <div>
-                            <input type = "submit" value = "register" id = "reg-submit" onClick={()=>{handleChoice();}}/>
+                            <input type = "submit" value = "register" id = "reg-submit" onClick={()=>{ handleChoice(); }}/>
                         </div>
                         :''
                     }
                     {
                         selection==='login'?
                         <div>
-                            <input type = "submit" value = "login" id = "reg-submit" onClick={()=>{ handleChoice();  }}/>
+                            <input type = "submit" value = "login" id = "reg-submit" onClick={()=>{ handleChoice(); }}/>
                         </div>
                         :''
                     }

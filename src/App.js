@@ -16,15 +16,15 @@ class App extends Component
 {
 
   state = {
-    currentUser : '',
+    currentUser : {},
     returning:false
   }
 
   setUser = (user) =>{
-    this.setState({currentUser:user})
+    this.setState({currentUser : user, ...this.state } )
   }
   setStatus = (s) =>{
-    this.setState({returning:s})
+    this.setState({ returning : s })
     
     
   }
