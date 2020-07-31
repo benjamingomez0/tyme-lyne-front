@@ -4,7 +4,11 @@ const tymeLyneSchema = new mongoose.Schema({
     user:{type: mongoose.Schema.Types.ObjectId,
         ref: 'User'},
     defaultStart:Number,
-    tasks: [String]
+    tasks: [{   name:String, 
+                obligation: Boolean, 
+                hours: Number,
+                priority: Number 
+            }]
 });
 
 const TymeLyne = mongoose.model('TymeLyne',tymeLyneSchema);

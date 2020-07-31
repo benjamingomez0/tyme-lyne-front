@@ -1,7 +1,8 @@
-const express = require('express')
-const router  = express.Router()
-const User    =  require('../models/Users')
-const bcrypt  = require('bcrypt')
+const express  = require('express')
+const router   = express.Router()
+const User     =  require('../models/Users')
+const TymeLyne = require('../models/TymeLynes');
+const bcrypt   = require('bcrypt')
 
 
 router.get('/users', (req,res) =>{
@@ -51,7 +52,16 @@ router.post('/users/login', async (req,res)=>{
 
         if(foundUser)
         {
-
+            if(bcrypt.compareSync(req.body.password, foundUser.password))
+            {
+                
+                res.json({
+                    user_id: foundUser._id,
+                    display_name : foundUser.display_name,
+                    message: "success, user logged in!",
+                    code:200
+                })
+            }
         }
     }
     catch(err)

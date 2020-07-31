@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import * as ROUTES from '../../Constants/routes'
 import './LogRegStyle.css';
 
 
@@ -20,17 +21,16 @@ export default class LogReg extends Component{
 
     handleSubmit = async (e) =>{
         e.preventDefault() 
-
-
-        if(this.state.password !== this.state.confirm)
+        if(this.state.password !== this.state.confirm&& this.props.returning !== true)
         {
             this.setState({confirmError:'Password must match confirmation'})
         }
         else
         {
             // this section handles the registering a user for when the component is configured for registration
-            if(!this.props.returning)
+            if( !this.props.returning )
             {
+                
                 const data = 
                 {
                     display_name: this.state.display_name,
@@ -46,26 +46,59 @@ export default class LogReg extends Component{
                         'Content-Type': 'application/json'
                     },
                 }) ;
-                const userParsed = await user.json();
                 
-                console.log(userParsed)
-
-                if(user.code === 400)
+                const parsedUser = await user.json();
+                
+                if(parsedUser.code === 400)
                 {
                     this.setState({emailError:user.message})
                 }
                 else
                 {
-                    this.props.setUser(userParsed)
-                }
-                
-                
+                    const userState = 
+                    { 
+                      display_name: parsedUser.display_name,
+                      user_id: parsedUser.user_id
+                    }
 
-                
+                    this.props.setUser(userState)
+                    this.props.history.push(`${ROUTES.DASHBOARD}/${userState.user_id}`)
+                }
+                                
             }
             else
             {
-                //TO DO: this section is for when the component is configured for logging in instead of registering
+                const data = 
+                {
+                    email: this.state.email,
+                    password: this.state.password
+                } 
+                const foundUser = await fetch(`http://localhost:8000/auth/users/login`,
+                {
+                    method:'POST',
+                    body:JSON.stringify(data),
+                    mode:'cors',
+                    headers:{
+                        'Content-Type': 'application/json'
+                    }
+                })
+                const parsedUser = await foundUser.json()
+
+                if(parsedUser.code === 400)
+                {
+                    this.setState({emailError:parsedUser.message})
+                }
+                else
+                {
+                    const userState = 
+                    { 
+                      display_name: parsedUser.display_name,
+                      user_id: parsedUser.user_id
+                    }
+                    this.props.setUser(userState)
+                    // this.props.history.push(`${ROUTES.DASHBOARD}/${userState.user_id}`)
+                    this.props.history.push(`${ROUTES.DASHBOARD}`)
+                }
             }
             
         }

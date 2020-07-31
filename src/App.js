@@ -21,7 +21,7 @@ class App extends Component
   }
 
   setUser = (user) =>{
-    this.setState({currentUser : user, ...this.state } )
+    this.setState({currentUser : user, ...this.state.returning })
   }
   setStatus = (s) =>{
     this.setState({ returning : s })
@@ -37,8 +37,8 @@ class App extends Component
         <Switch>
             <Route exact path = {ROUTES.HOME} render ={(props)=><HomeContainer setStatus = {this.setStatus} {...props}/>}/>
             <Route exact path = {ROUTES.REGISTER} render ={(props)=> <LogReg  setUser = {this.setUser} currentUser = {this.state.currentUser} {...props}/>}/>
-            <Route exact path = {ROUTES.LOGIN} render ={(props)=> <LogReg  setUser = {this.setUser} currentUser = {this.state.currentUser} returning =  {this.state.returning}/>}/>
-            <Route exact path = {`${ROUTES.DASHBOARD}:/id}`} render = {(props)=> <Dashboard currentUser = {this.state.currentUser} {...props}/>}/>
+            <Route exact path = {ROUTES.LOGIN} render ={(props)=> <LogReg  setUser = {this.setUser} currentUser = {this.state.currentUser} returning =  {this.state.returning} {...props}/> }/>
+            <Route exact path = {`${ROUTES.DASHBOARD}`} render = {(props)=> <Dashboard currentUser = {this.state.currentUser} {...props}/>}/>
          </Switch>
       </Router>
       </div>
