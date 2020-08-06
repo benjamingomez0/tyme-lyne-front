@@ -1,7 +1,6 @@
 const express  = require('express')
 const router   = express.Router()
 const User     =  require('../models/Users')
-const TymeLyne = require('../models/TymeLynes');
 const bcrypt   = require('bcrypt')
 
 

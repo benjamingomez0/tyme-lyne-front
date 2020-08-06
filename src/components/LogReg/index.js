@@ -62,7 +62,7 @@ export default class LogReg extends Component{
                     }
 
                     this.props.setUser(userState)
-                    this.props.history.push(`${ROUTES.DASHBOARD}/${userState.user_id}`)
+                    this.props.history.push(`${ROUTES.DASHBOARD}`)
                 }
                                 
             }
