@@ -15,12 +15,14 @@ router.post('/dashboard', async(req,res)=>{
             }
             else
             {
+                console.log("this is the dash route")
+                console.log(tymelyne)
                 res.json(tymelyne)
-                console.log('hit')
+                
             }
 
         })
-        console.log(foundTL)
+        
     }
     catch(err)
     {
